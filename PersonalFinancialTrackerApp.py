@@ -88,6 +88,35 @@ def close_db_connection(conn):
     except sqlite3.Error as e:#an error will be displayed if the system fails to close the database
         print(f"Database close error: {e}")
 
+#adding the new functions in our database that will be used to return the total amount of a transaction in a loop
+def get_total_income(conn):#This function is for calculating the total amount of the income
+    try:
+        cursor = conn.cursor()
+        cursor.execute("SELECT SUM(amount) FROM transactions WHERE transaction_type = 'Income'")
+        result = cursor.fetchone()
+        if result and result[0] is not None:  # Check for None result
+            return result[0]
+        else:
+            return 0.0  # Return 0.0 if there's no income
+    except sqlite3.Error as e:#an error will be displayed the system fails to make the calcultions of the income
+        print(f"Error getting total income: {e}")
+        return 0.0
+
+
+
+def get_total_expenses(conn):# this one will be used in calculating the total outcome
+    try:
+        cursor = conn.cursor()
+        cursor.execute("SELECT SUM(amount) FROM transactions WHERE transaction_type = 'Expense'")
+        result = cursor.fetchone()
+        if result and result[0] is not None:  # Check for None result
+            return result[0]
+        else:
+            return 0.0  # Return 0.0 if there are no expenses
+    except sqlite3.Error as e:#an error will be displayed if the system fails to get the total amount of the outcome money
+        print(f"Error getting total expenses: {e}")
+    return 0.0
+
 #the following class will be used to configure everything about the GUI and connecting to the app using Tkinter as my GUI library
 class FinanceTrackerApp:
     def __init__(self, window):#creating the constructor of our main window
@@ -105,6 +134,49 @@ class FinanceTrackerApp:
 
         self.create_widgets() #creating a widget that will be on top of the displaying widget which will be used to crete new transactions
         self.load_transactions() #this widget will be connected tho "create_table" widget for getting transactions from our database to main window
+        self.create_summary_widgets()
+        self.load_transactions()
+        self.update_summary_labels()  # this function will be called for the transactions sumary
+
+    def create_summary_widgets(self):
+
+        summary_frame = ttk.LabelFrame(self.window, text="Transaction Summary")
+        summary_frame.pack(padx=10, pady=10, fill="x")
+
+        ttk.Label(summary_frame, text="Total Income:").grid(row=0, column=0, padx=5, pady=5,sticky="w")
+        self.total_income_label = ttk.Label(summary_frame, text="0.00")
+        self.total_income_label.grid(row=0, column=1, padx=5, pady=5, sticky="w")
+
+        ttk.Label(summary_frame, text="Total Expenses:").grid(row=1, column=0, padx=5, pady=5, sticky="w")
+        self.total_expenses_label = ttk.Label(summary_frame, text="0.00")
+        self.total_expenses_label.grid(row=1, column=1, padx=5, pady=5, sticky="w")
+
+        ttk.Label(summary_frame, text="Current Balance:").grid(row=2, column=0, padx=5, pady=5, sticky="w")
+        self.current_balance_label = ttk.Label(summary_frame, text="0.00")
+        self.current_balance_label.grid(row=2, column=1, padx=5, pady=5, sticky="w")
+
+    def update_summary_labels(self):
+
+        total_income = get_total_income(self.conn)
+        total_expenses = get_total_expenses(self.conn)
+        current_balance = total_income - total_expenses
+
+        self.total_income_label.config(text=f"{total_income:.2f}")
+        self.total_expenses_label.config(text=f"{total_expenses:.2f}")
+        self.current_balance_label.config(text=f"{current_balance:.2f}")
+
+    def add_transaction(self):
+        self.update_summary_labels()  # Update summaries after adding
+
+    def update_selected_transaction(self):
+        self.update_summary_labels()  # Update summaries after updating
+
+    def delete_selected_transaction(self):
+        self.update_summary_labels()  # Update summaries after deleting
+
+    def load_transactions(self):
+        self.update_summary_labels()  # Update summaries after loading
+
 
 #this fuction creates labels and input fields for creating new transsactions
     def create_widgets(self):
