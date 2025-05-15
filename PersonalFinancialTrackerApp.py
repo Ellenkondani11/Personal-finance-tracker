@@ -11,7 +11,7 @@ def connect_to_db(db_name="finance.db"):
         print(f"Database connection error: {e}")
         return None
 
-#this function attemptes to create a table called transaction in my database if it does not exist ese it will skip
+#this function attempts to create a table called transaction in my database if it does not exist ese it will skip
 def create_table(conn):
     try:
         cursor = conn.cursor()
