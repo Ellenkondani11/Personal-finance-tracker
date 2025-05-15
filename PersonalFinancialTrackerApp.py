@@ -54,7 +54,7 @@ def get_all_transactions(conn):
         print(f"Error getting all transactions: {e}")
         return []
 
-#this one will bbe used to update existing transactions in the table by selecting one using its ID
+#this one will be used to update existing transactions in the table by selecting one using its ID
 def update_transaction(conn, transaction_id, transaction):
     try:
         cursor = conn.cursor()
