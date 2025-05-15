@@ -29,7 +29,7 @@ def create_table(conn):
     except sqlite3.Error as e:#will display an error if the table creation fails
         print(f"Database table creation error: {e}")
 
-#this function wil be called when athe user is attempting to create a transaction into our tabe called "transactions"
+#this function will be called when athe user is attempting to create a transaction into our tabe called "transactions"
 def create_transaction(conn, transaction):
     try:
         cursor = conn.cursor()
