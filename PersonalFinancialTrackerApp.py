@@ -126,7 +126,7 @@ class FinanceTrackerApp:
 
         self.conn = connect_to_db() #in my window, i'm trying to connect to the database so that I should be interacting with it
         if not self.conn:# declairing a condition if the connection with database fails that it should displlay the error in the message box
-            messagebox.showerror("Error", "Could not connect to the database.")
+            messagebox.showerror("Error", "Sorry! the system could not connect to the database.")
             self.window.destroy()
             return
 
