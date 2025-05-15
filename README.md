@@ -3,7 +3,7 @@
 ## Description
 
 This application helps you keep track of your income and expenses.
-You can add new transactions, see a list of all transactions, change transaction details, and remove transactions you no longer need to see. [cite: 12, 13, 14, 15, 16, 17, 18]
+You can add new transactions, see a list of all transactions, change transaction details, and remove transactions you no longer need to see. 
 
 ## Setup Instructions
 
